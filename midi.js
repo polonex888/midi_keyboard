@@ -76,7 +76,7 @@ function handleMIDIMessage(event) {
             break;
     }
 }
-let thereBeSound = false;
+let thereBeSound = true;
 //MIDIメッセージ（TODO）
 function onMessage(msg) {
     console.log(msg.data);
