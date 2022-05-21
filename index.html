@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Web MIDI API Sample</title>
+    <script src="window.js"></script>
+    <script src="audio.js"></script>
+    <script src="midi.js"></script>
+    <style>
+    #log {
+	width:90%;
+	height:240px;
+	position:absolute; left:28px;
+	background-color:#eeeeee;
+    border: 2px solid #000000;
+	font-family:Courier New, monospace;
+	font-size: 12pt; 
+	line-height : 1.05em;
+	color:#000000;
+	overflow:auto;
+	margin: 0 auto;
+	white-space:pre;
+    }
+    ul {
+      list-style: none;
+      overflow: scroll;
+      padding-bottom: 10px;
+      padding-left: 1px;
+      position: relative;
+      width: 2300px;
+    }
+
+    li {
+      align-items: flex-end;
+      display: flex;
+      float: left;
+      justify-content: center;
+      padding-bottom: 24px;
+      position: relative;
+      font-size: 18px;
+      text-align: center;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    li:first-child {
+      margin-left: 0;
+    }
+
+    .white + .white {
+      margin-left: 1px;
+    }
+
+    .white {
+      background: white;
+      border-radius: 0 0 5px 5px;
+      border: 1px solid #ccc;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+      height: 300px;
+      margin-left: -15px;
+      width: 40px;
+      color: #222;
+    }
+
+    .black {
+      background: linear-gradient(3deg, rgb(0, 0, 0), rgb(100, 100, 100) 90%);
+      border-color: #666 #222 #111 #555;
+      border-radius: 0 0 2px 2px;
+      border-style: solid;
+      border-width: 1px 2px 7px;
+      height: 170px;
+      margin-left: -14px;
+      position: relative;
+      width: 26px;
+      z-index: 1;
+      color: #ddd;
+      left: 0;
+    }
+    </style>
+</head>
+<body>
+    <h1>Web MIDI API Sample</h1>
+    <!------------------------------------keyboard-------------------------------------------->
+    <ul id="keys">
+        <li class="white" id="midi-21"><span class="notename">A0</span><span class="keyname"></span></li>
+        <li class="black" id="midi-22"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-23"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-24"><span class="notename">C</span><span class="keyname"></span></li>
+        <li class="black" id="midi-25"><span class="notename">C♯<br>D♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-26"><span class="notename">D</span><span class="keyname"></span></li>
+        <li class="black" id="midi-27"><span class="notename">D♯<br>E♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-28"><span class="notename">E</span><span class="keyname"></span></li>
+        <li class="white" id="midi-29"><span class="notename">F</span><span class="keyname"></span></li>
+        <li class="black" id="midi-30"><span class="notename">F♯<br>G♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-31"><span class="notename">G</span><span class="keyname"></span></li>
+        <li class="black" id="midi-32"><span class="notename">G♯<br>A♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-33"><span class="notename">A1</span><span class="keyname"></span></li>
+        <li class="black" id="midi-34"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-35"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-36"><span class="notename">C</span><span class="keyname"></span></li>
+        <li class="black" id="midi-37"><span class="notename">C♯<br>D♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-38"><span class="notename">D</span><span class="keyname"></span></li>
+        <li class="black" id="midi-39"><span class="notename">D♯<br>E♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-40"><span class="notename">E</span><span class="keyname"></span></li>
+        <li class="white" id="midi-41"><span class="notename">F</span><span class="keyname"></span></li>
+        <li class="black" id="midi-42"><span class="notename">F♯<br>G♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-43"><span class="notename">G</span><span class="keyname"></span></li>
+        <li class="black" id="midi-44"><span class="notename">G♯<br>A♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-45"><span class="notename">A2</span><span class="keyname"></span></li>
+        <li class="black" id="midi-46"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-47"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-48"><span class="notename">C</span><span class="keyname">z</span></li>
+        <li class="black" id="midi-49"><span class="notename">C♯<br>D♭</span><span class="keyname">s</span></li>
+        <li class="white" id="midi-50"><span class="notename">D</span><span class="keyname">x</span></li>
+        <li class="black" id="midi-51"><span class="notename">D♯<br>E♭</span><span class="keyname">d</span></li>
+        <li class="white" id="midi-52"><span class="notename">E</span><span class="keyname">c</span></li>
+        <li class="white" id="midi-53"><span class="notename">F</span><span class="keyname">v</span></li>
+        <li class="black" id="midi-54"><span class="notename">F♯<br>G♭</span><span class="keyname">g</span></li>
+        <li class="white" id="midi-55"><span class="notename">G</span><span class="keyname">b</span></li>
+        <li class="black" id="midi-56"><span class="notename">G♯<br>A♭</span><span class="keyname">h</span></li>
+        <li class="white" id="midi-57"><span class="notename">A3</span><span class="keyname">n</span></li>
+        <li class="black" id="midi-58"><span class="notename">A♯<br>B♭</span><span class="keyname">j</span></li>
+        <li class="white" id="midi-59"><span class="notename">B</span><span class="keyname">m</span></li>
+        <li class="white" id="midi-60"><span class="notename">C</span><span class="keyname">q</span></li>
+        <li class="black" id="midi-61"><span class="notename">C♯<br>D♭</span><span class="keyname">2</span></li>
+        <li class="white" id="midi-62"><span class="notename">D</span><span class="keyname">w</span></li>
+        <li class="black" id="midi-63"><span class="notename">D♯<br>E♭</span><span class="keyname">3</span></li>
+        <li class="white" id="midi-64"><span class="notename">E</span><span class="keyname">e</span></li>
+        <li class="white" id="midi-65"><span class="notename">F</span><span class="keyname">r</span></li>
+        <li class="black" id="midi-66"><span class="notename">F♯<br>G♭</span><span class="keyname">5</span></li>
+        <li class="white" id="midi-67"><span class="notename">G</span><span class="keyname">t</span></li>
+        <li class="black" id="midi-68"><span class="notename">G♯<br>A♭</span><span class="keyname">6</span></li>
+        <li class="white" id="midi-69"><span class="notename">A4</span><span class="keyname">y</span></li>
+        <li class="black" id="midi-70"><span class="notename">A♯<br>B♭</span><span class="keyname">7</span></li>
+        <li class="white" id="midi-71"><span class="notename">B</span><span class="keyname">u</span></li>
+        <li class="white" id="midi-72"><span class="notename">C</span><span class="keyname">i</span></li>
+        <li class="black" id="midi-73"><span class="notename">C♯<br>D♭</span><span class="keyname">9</span></li>
+        <li class="white" id="midi-74"><span class="notename">D</span><span class="keyname">o</span></li>
+        <li class="black" id="midi-75"><span class="notename">D♯<br>E♭</span><span class="keyname">0</span></li>
+        <li class="white" id="midi-76"><span class="notename">E</span><span class="keyname">p</span></li>
+        <li class="white" id="midi-77"><span class="notename">F</span><span class="keyname"></span></li>
+        <li class="black" id="midi-78"><span class="notename">F♯<br>G♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-79"><span class="notename">G</span><span class="keyname"></span></li>
+        <li class="black" id="midi-80"><span class="notename">G♯<br>A♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-81"><span class="notename">A5</span><span class="keyname"></span></li>
+        <li class="black" id="midi-82"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-83"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-84"><span class="notename">C</span><span class="keyname"></span></li>
+        <li class="black" id="midi-85"><span class="notename">C♯<br>D♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-86"><span class="notename">D</span><span class="keyname"></span></li>
+        <li class="black" id="midi-87"><span class="notename">D♯<br>E♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-88"><span class="notename">E</span><span class="keyname"></span></li>
+        <li class="white" id="midi-89"><span class="notename">F</span><span class="keyname"></span></li>
+        <li class="black" id="midi-90"><span class="notename">F♯<br>G♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-91"><span class="notename">G</span><span class="keyname"></span></li>
+        <li class="black" id="midi-92"><span class="notename">G♯<br>A♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-93"><span class="notename">A6</span><span class="keyname"></span></li>
+        <li class="black" id="midi-94"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-95"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-96"><span class="notename">C</span><span class="keyname"></span></li>
+        <li class="black" id="midi-97"><span class="notename">C♯<br>D♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-98"><span class="notename">D</span><span class="keyname"></span></li>
+        <li class="black" id="midi-99"><span class="notename">D♯<br>E♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-100"><span class="notename">E</span><span class="keyname"></span></li>
+        <li class="white" id="midi-101"><span class="notename">F</span><span class="keyname"></span></li>
+        <li class="black" id="midi-102"><span class="notename">F♯<br>G♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-103"><span class="notename">G</span><span class="keyname"></span></li>
+        <li class="black" id="midi-104"><span class="notename">G♯<br>A♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-105"><span class="notename">A7</span><span class="keyname"></span></li>
+        <li class="black" id="midi-106"><span class="notename">A♯<br>B♭</span><span class="keyname"></span></li>
+        <li class="white" id="midi-107"><span class="notename">B</span><span class="keyname"></span></li>
+        <li class="white" id="midi-108"><span class="notename">C</span><span class="keyname"></span></li>
+    </ul>
+    <p>
+        <label for="input_selector">MIDI Input Port: </label>
+        <select name="input_selector" id="input_selector">
+            <option value = "0" selected>Display keyboard</option>
+        </select>
+    </p>
+    <p>
+        <label for="output_selector">MIDI Output Port: </label>
+        <select name="output_selector" id="output_selector">
+            <option value = "0" selected>PC audio</option>
+        </select>
+    </p>
+    message:
+<button type="button" id="stoplog" value=1 onclick="stop_start();">STOP LOG</button>
+</div>
+<pre id="log">
+</pre>
+<script>
+const stoplog=document.getElementById("stoplog");
+
+function stop_start()
+{
+	if(stoplog.value==0){
+		stoplog.value=1;
+		stoplog.innerHTML="STOP LOG";
+	} else {
+		stoplog.value=0;
+		stoplog.innerHTML="START LOG";
+	}
+}
+</script>
+<br>
+</body>
+</html>
