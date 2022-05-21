@@ -2,7 +2,7 @@
 const audioCtx = window.AudioContext ? new AudioContext() : new webkitAudioContext();
 
 const sampleMidi = 60;
-const samplePath = 'c4.mp3';
+const samplePath = './c4.mp3';
 const attackTime = 0.005;
 const releaseTime = 0.1;
 
