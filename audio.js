@@ -24,6 +24,7 @@ function loadSamples(files) {
                 .then(audioBuffer => {
                     buffers.set(element, audioBuffer);
                     if (buffers.size === files.length) {
+                        console.log("sample load done");
                         resolve(buffers);
                     }
                 })

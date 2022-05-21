@@ -84,6 +84,7 @@ function onMessage(msg) {
     const note = msg.data[1];
     const velocity = msg.data[2];
     const key = document.getElementById('midi-' + note);
+    console.log(key);
     if (!key) {
       return;
     }
@@ -96,6 +97,7 @@ function onMessage(msg) {
         }
       } else {
         if (thereBeSound && !Playing[note]) { // just play once
+          console.log("playsound");
           Playing[note] = playSample(midi2rate(note), velocity / 127);
         }
         key.classList.add('activekey');  
