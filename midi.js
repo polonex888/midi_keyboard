@@ -76,7 +76,7 @@ function handleMIDIMessage(event) {
             break;
     }
 }
-let thereBeSound = true;
+let thereBeSound = false;
 //MIDIメッセージ（TODO）
 function onMessage(msg) {
     console.log(msg.data);
@@ -97,7 +97,6 @@ function onMessage(msg) {
         }
       } else {
         if (thereBeSound && !Playing[note]) { // just play once
-          console.log("playsound");
           Playing[note] = playSample(midi2rate(note), velocity / 127);
         }
         key.classList.add('activekey');  
@@ -110,7 +109,8 @@ function onMessage(msg) {
         delete Playing[note];
       }
     }
-} 
+}
+
 function keysSetting(){
     keys.onmousedown = keys.ontouchstart = keys.ondblclick = e => {
         onMessage({data: [NOTEON, Number(e.target.id.replace('midi-', '')), MAX_VELOCITY]});
