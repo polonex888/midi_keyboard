@@ -37,21 +37,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	keys = document.getElementById('keys');
     message = document.getElementById('log');
     load();
-    if (!localStorage.getItem('sounds')) {
-        localStorage.setItem('sounds', true);
-      }
-      sounds.checked = localStorage.getItem('sounds') === 'true';
-      if (sounds.checked) {
-        thereBeSound = true;
-      }
-      sounds.onchange = () => {
-        localStorage.setItem('sounds', sounds.checked);
-        if (sounds.checked) {
-          thereBeSound = true;
-        } else {
-          thereBeSound = false;
-        }
-    };
 });
 
 

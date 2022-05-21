@@ -76,7 +76,6 @@ function handleMIDIMessage(event) {
             break;
     }
 }
-let thereBeSound = false;
 //MIDIメッセージ（TODO）
 function onMessage(msg) {
     console.log(msg.data);
@@ -96,7 +95,7 @@ function onMessage(msg) {
           delete Playing[note];
         }
       } else {
-        if (thereBeSound && !Playing[note]) { // just play once
+        if (!Playing[note]) { // just play once
           Playing[note] = playSample(midi2rate(note), velocity / 127);
         }
         key.classList.add('activekey');  
